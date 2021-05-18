@@ -11,31 +11,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeScreenController extends AbstractController
 {
     /**
-     * @Route("/recipe/add", name="add_new_recipe", methods={"POST"})
+     * @Route("/recipe/add", name="add_new_recipe", methods={"GET", "POST"})
      */
-    public function addRecipe($request): Response{
+    public function addRecipe($request){
         $entityManager = $this->getDoctrine()->getManager();
 
+        $data=json_decode($request->getContent(), true);
+
         $newRecipe = new Recipe();
-        $newRecipe->setSnackname('Omelette');
-        $newRecipe->setIngredients('eggs, oil');
-        $newRecipe->setInstructions('easy');
-
-        $newRecipe = $request->query-get("snackname");
-
-        $newRecipe1 = new Recipe();
-        $newRecipe1->setSnackname('waffle');
-        $newRecipe1->setIngredients('eggs, oil, flour, butter, sugar');
-        $newRecipe1->setInstructions('medium');
+        $newRecipe->setSnackname($data['snackname']);
+        $newRecipe->setImage($data['image']);
+        $newRecipe->setIngredients($data['ingredients']);
+        $newRecipe->setInstructions($data['instructions']);
 
         $entityManager->persist($newRecipe);
-        $entityManager->persist($newRecipe1);
 
         $entityManager->flush();
 
-        return new Response($newRecipe);
-
-        return new Response('trying to add new recipe...' . $newRecipe1->getId() . $newRecipe->getId());
+        return new Response('trying to add new recipe...' . $newRecipe->getId());
     }
 
     /**
@@ -60,7 +53,7 @@ class HomeScreenController extends AbstractController
     }
 
     /**
-     * @Route("/recipe/find/{id}", name="find_a_recipe", methods={"PUT"})
+     * @Route("/recipe/find/{id}", name="find_a_recipe", methods={"GET"})
      */
     public function findRecipe($id) {
         $recipe = $this->getDoctrine()->getRepository(Recipe::class)->find($id);
@@ -73,7 +66,7 @@ class HomeScreenController extends AbstractController
             return $this->json([
                 'id' => $recipe->getId(),
                 'snackname' => $recipe->getSnackname(),
-                'image'=> $recipe->getImage(),
+                'image' => $recipe->getImage(),
                 'ingredients' => $recipe->getIngredients(),
                 'instructions' => $recipe->getInstructions()
             ]);
@@ -81,7 +74,7 @@ class HomeScreenController extends AbstractController
     }
 
     /**
-     * @Route("/recipe/edit/{id}/{snackname}", name="edit_a_recipe", methods={"PUT"})
+     * @Route("/recipe/edit/{id}/{name}", name="edit_a_recipe", methods={"PUT"})
      */
     public function editRecipe($id, $snackname) {
         $entityManager = $this->getDoctrine()->getManager();
