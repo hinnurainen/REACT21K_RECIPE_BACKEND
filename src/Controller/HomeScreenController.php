@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeScreenController extends AbstractController
 {
     /**
-     * @Route("/recipe/add", name="add_new_recipe", methods={"GET", "POST"})
+     * @Route("/recipe/add", name="add_new_recipe", methods={"POST"})
      */
     public function addRecipe(Request $request){
         $entityManager = $this->getDoctrine()->getManager();
