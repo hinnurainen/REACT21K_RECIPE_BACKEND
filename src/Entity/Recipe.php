@@ -33,9 +33,22 @@ class Recipe
     private $ingredients=[];
 
     /**
-     * @ORM\Column (type="string")
+     * @ORM\Column(type="text")
      */
     private $instructions;
+
+    public function getInstructions(): ?string
+    {
+        return $this->instructions;
+    }
+
+    public function setInstructions(string $instructions): self
+    {
+        $this->instructions = $instructions;
+
+        return $this;
+    }
+
 
     public function getId(): ?int
     {
@@ -75,7 +88,7 @@ class Recipe
         return $this;
     }
 
-    public function getInstructions(): ?string
+  /*  public function getInstructions(): ?string
     {
         return $this->instructions;
     }
@@ -84,5 +97,5 @@ class Recipe
     {
         $this->instructions=$instructions;
         return $this;
-    }
+    }*/
 }
